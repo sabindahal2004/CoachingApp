@@ -1,7 +1,9 @@
-import {View, Image, Text, StyleSheet} from 'react-native';
+import {View, Image, Text, StyleSheet, TouchableOpacity} from 'react-native';
 import Colors from '../constant/Colors';
+import {useRouter} from 'expo-router';
 
 export default function Index() {
+  const router = useRouter();
   return (
     <View style={styles.container}>
       <Image
@@ -16,13 +18,15 @@ export default function Index() {
           with AI! 📚🤖
         </Text>
 
-        <View style={styles.button}>
+        <TouchableOpacity style={styles.button} activeOpacity={0.7} onPress={()=> router.push('/auth/signUp')}>
           <Text style={[styles.buttonText, {color: Colors.PRIMARY}]}>
             Get Started
           </Text>
-        </View>
+        </TouchableOpacity>
 
-        <View
+        <TouchableOpacity
+          activeOpacity={0.7}
+          onPress={()=> router.push('/auth/signIn')}
           style={[
             styles.button,
             {
@@ -34,7 +38,7 @@ export default function Index() {
           <Text style={[styles.buttonText, {color: Colors.WHITE}]}>
             Already have an account?
           </Text>
-        </View>
+        </TouchableOpacity>
       </View>
     </View>
   );
@@ -71,13 +75,13 @@ const styles = StyleSheet.create({
     fontSize: 30,
     textAlign: 'center',
     color: Colors.WHITE,
-    fontFamily:'outfit-bold',
+    fontFamily: 'outfit-bold',
   },
   description: {
     fontSize: 20,
     color: Colors.WHITE,
     marginTop: 20,
     textAlign: 'center',
-    fontFamily:'outfit-regular',
+    fontFamily: 'outfit-regular',
   },
 });
