@@ -75,13 +75,13 @@ const styles = StyleSheet.create({
     fontSize: 30,
     textAlign: 'center',
     color: Colors.WHITE,
-    fontFamily: 'outfit-bold',
+    fontFamily: 'Outfit-Bold',
   },
   description: {
     fontSize: 20,
     color: Colors.WHITE,
     marginTop: 20,
     textAlign: 'center',
-    fontFamily: 'outfit-regular',
+    fontFamily: 'Outfit-Regular',
   },
 });
