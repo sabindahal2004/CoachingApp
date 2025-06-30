@@ -9,10 +9,13 @@ import {
   ScrollView,
   TouchableOpacity,
   Pressable,
+  Dimensions,
 } from 'react-native';
 import React, {useState} from 'react';
 import Colors from '../../constant/Colors';
 import {useRouter} from 'expo-router';
+
+const {width} = Dimensions.get('window');
 
 const SignUp = () => {
   const [fullName, setFullName] = useState('');
@@ -61,10 +64,17 @@ const SignUp = () => {
         <TouchableOpacity style={styles.createBtn} activeOpacity={0.7}>
           <Text style={styles.createText}>Create Account</Text>
         </TouchableOpacity>
-        <View style={{flexDirection: 'row', marginTop: 20, gap: 3}}>
+
+        <View style={styles.dividerContainer}>
+          <View style={styles.divider} />
+          <Text style={styles.orText}>or</Text>
+          <View style={styles.divider} />
+        </View>
+
+        <View style={styles.footer}>
           <Text>Already have an account?</Text>
           <Pressable onPress={() => router.push('/auth/signIn')}>
-            <Text style={{color: Colors.PRIMARY}}>Sign In</Text>
+            <Text style={styles.signInText}>Sign In</Text>
           </Pressable>
         </View>
       </ScrollView>
@@ -95,6 +105,7 @@ const styles = StyleSheet.create({
   },
   textInput: {
     borderWidth: 1,
+    borderColor: Colors.GRAY,
     width: '100%',
     padding: 15,
     fontSize: 18,
@@ -113,5 +124,28 @@ const styles = StyleSheet.create({
     textAlign: 'center',
     fontSize: 20,
     fontFamily: 'Outfit-Regular',
+  },
+  dividerContainer: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    marginVertical: 20,
+    width: '100%',
+  },
+  divider: {
+    flex: 1,
+    height: 1,
+    backgroundColor: Colors.GRAY,
+  },
+  orText: {
+    marginHorizontal: 10,
+    fontSize: 16,
+    color: Colors.GRAY,
+  },
+  footer: {
+    flexDirection: 'row',
+    gap: 3,
+  },
+  signInText: {
+    color: Colors.PRIMARY,
   },
 });
