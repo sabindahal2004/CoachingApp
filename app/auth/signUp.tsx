@@ -9,13 +9,10 @@ import {
   ScrollView,
   TouchableOpacity,
   Pressable,
-  Dimensions,
 } from 'react-native';
 import React, {useState} from 'react';
 import Colors from '../../constant/Colors';
 import {useRouter} from 'expo-router';
-
-const {width} = Dimensions.get('window');
 
 const SignUp = () => {
   const [fullName, setFullName] = useState('');
