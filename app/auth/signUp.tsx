@@ -10,14 +10,46 @@ import {
   TouchableOpacity,
   Pressable,
 } from 'react-native';
-import React, {useState} from 'react';
+import React, {useState, useContext} from 'react';
 import Colors from '../../constant/Colors';
 import {useRouter} from 'expo-router';
+import {createUserWithEmailAndPassword} from 'firebase/auth';
+import {auth, db} from '@/config/firebaseConfig';
+import {setDoc, doc} from 'firebase/firestore';
+import {UserDetailsContext} from '@/context/UserDetailsContext';
 
 const SignUp = () => {
   const [fullName, setFullName] = useState('');
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
+  const {userDetails, setUserDetails} = useContext(UserDetailsContext);
+
+  const handleCreateNewAccount = () => {
+    createUserWithEmailAndPassword(auth, email, password)
+      .then(async response => {
+        const user = response.user;
+        console.log(user);
+        // Save user data to database
+        await SaveUser(user);
+      })
+      .catch(error => {
+        console.error('Error creating account:', error);
+        alert(error.message);
+      });
+  };
+  const SaveUser = async (user: any) => {
+    try {
+      await setDoc(doc(db, 'users', email), {
+        fullName,
+        email,
+        membership: false,
+        userId: user?.uid,
+      });
+      console.log('User saved successfully');
+    } catch (error) {
+      console.error('Error saving user:', error);
+    }
+  };
 
   const router = useRouter();
   return (
@@ -58,7 +90,10 @@ const SignUp = () => {
           onChangeText={setPassword}
         />
 
-        <TouchableOpacity style={styles.createBtn} activeOpacity={0.7}>
+        <TouchableOpacity
+          style={styles.createBtn}
+          activeOpacity={0.7}
+          onPress={handleCreateNewAccount}>
           <Text style={styles.createText}>Create Account</Text>
         </TouchableOpacity>
 
