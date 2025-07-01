@@ -6,7 +6,7 @@ import {ActivityIndicator} from 'react-native';
 import {UserDetailsContext} from '@/context/UserDetailsContext';
 
 export default function RootLayout() {
-  const [userDetail, setUserDetail] = useState();
+  const [userDetails, setUserDetails] = useState();
   // Load custom fonts
   const [fontsLoaded] = useFonts({
     'Outfit-Regular': require('../assets/fonts/Outfit-Regular.ttf'),
@@ -18,7 +18,7 @@ export default function RootLayout() {
     return <ActivityIndicator size="large" style={{flex: 1}} />;
   }
   return (
-    <UserDetailsContext.Provider value={{userDetail, setUserDetail}}>
+    <UserDetailsContext.Provider value={{userDetails, setUserDetails}}>
       <SafeAreaView style={{flex: 1}}>
         <Stack screenOptions={{headerShown: false}} />
       </SafeAreaView>

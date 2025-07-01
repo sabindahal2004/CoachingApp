@@ -9,16 +9,50 @@ import {
   ScrollView,
   TouchableOpacity,
   Pressable,
+  ActivityIndicator,
 } from 'react-native';
-import React, {useState} from 'react';
+import React, {useContext, useState} from 'react';
 import Colors from '../../constant/Colors';
 import {useRouter} from 'expo-router';
+import {signInWithEmailAndPassword} from 'firebase/auth';
+import {auth, db} from '@/config/firebaseConfig';
+import {doc, getDoc} from 'firebase/firestore';
+import {UserDetailsContext} from '@/context/UserDetailsContext';
 
 const SignIn = () => {
+  const router = useRouter();
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
+  const [loading, setLoading] = useState(false);
+  const {userDetails, setUserDetails} = useContext(UserDetailsContext);
 
-  const router = useRouter();
+  const handleSignIn = () => {
+    setLoading(true);
+    signInWithEmailAndPassword(auth, email, password)
+      .then(async response => {
+        const user = response.user;
+        console.log(user);
+        await getUserDetails();
+        setLoading(false);
+        router.replace('/(tabs)/home');
+      })
+      .catch(error => {
+        console.error('Error creating account:', error);
+        setLoading(false);
+        alert(error.message);
+      });
+  };
+
+  const getUserDetails = async () => {
+    try {
+      const result = await getDoc(doc(db, 'users', email));
+      setUserDetails(result.data());
+      console.log('User saved successfully');
+    } catch (error) {
+      console.error('Error saving user:', error);
+    }
+  };
+
   return (
     <KeyboardAvoidingView
       style={styles.container}
@@ -50,8 +84,16 @@ const SignIn = () => {
           onChangeText={setPassword}
         />
 
-        <TouchableOpacity style={styles.createBtn} activeOpacity={0.7}>
-          <Text style={styles.createText}>Sign In</Text>
+        <TouchableOpacity
+          disabled={loading}
+          style={styles.createBtn}
+          activeOpacity={0.7}
+          onPress={handleSignIn}>
+          {!loading ? (
+            <Text style={styles.createText}>Sign In</Text>
+          ) : (
+            <ActivityIndicator size={'large'} color={Colors.WHITE} />
+          )}
         </TouchableOpacity>
 
         <View style={styles.dividerContainer}>

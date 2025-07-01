@@ -37,14 +37,16 @@ const SignUp = () => {
         alert(error.message);
       });
   };
-  const SaveUser = async (user: any) => {
+  const SaveUser = async (user) => {
     try {
-      await setDoc(doc(db, 'users', email), {
+      const data = {
         fullName,
         email,
         membership: false,
         userId: user?.uid,
-      });
+      };
+      await setDoc(doc(db, 'users', email), data);
+      setUserDetails(data);
       console.log('User saved successfully');
     } catch (error) {
       console.error('Error saving user:', error);
