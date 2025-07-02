@@ -34,7 +34,7 @@ const SignIn = () => {
         console.log(user);
         await getUserDetails();
         setLoading(false);
-        router.replace('/(tabs)/home');
+        router.replace('/(tabs)/HomeScreen');
       })
       .catch(error => {
         console.error('Error creating account:', error);

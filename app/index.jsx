@@ -1,9 +1,21 @@
 import {View, Image, Text, StyleSheet, TouchableOpacity} from 'react-native';
 import Colors from '../constant/Colors';
 import {useRouter} from 'expo-router';
+import {onAuthStateChanged} from 'firebase/auth';
+import {auth, db} from '@/config/firebaseConfig';
+import {doc, getDoc} from 'firebase/firestore';
+import {UserDetailsContext} from '@/context/UserDetailsContext';
+import React, {useContext} from 'react';
 
 export default function Index() {
   const router = useRouter();
+  const {userDetails, setUserDetails} = useContext(UserDetailsContext);
+  onAuthStateChanged(auth, async user => {
+    if (user) {
+      console.log(user);
+      const result = await getDoc(doc(db, 'results', user?.email));
+    }
+  });
   return (
     <View style={styles.container}>
       <Image
@@ -18,7 +30,10 @@ export default function Index() {
           with AI! 📚🤖
         </Text>
 
-        <TouchableOpacity style={styles.button} activeOpacity={0.7} onPress={()=> router.push('/auth/signUp')}>
+        <TouchableOpacity
+          style={styles.button}
+          activeOpacity={0.7}
+          onPress={() => router.push('/auth/signUp')}>
           <Text style={[styles.buttonText, {color: Colors.PRIMARY}]}>
             Get Started
           </Text>
@@ -26,7 +41,7 @@ export default function Index() {
 
         <TouchableOpacity
           activeOpacity={0.7}
-          onPress={()=> router.push('/auth/signIn')}
+          onPress={() => router.push('/auth/signIn')}
           style={[
             styles.button,
             {
