@@ -3,11 +3,13 @@ import React, {useContext} from 'react';
 import Header from '../components/Home/Header';
 import {Platform} from 'react-native';
 import Colors from '../../constant/Colors';
+import NoCourse from '../components/Home/NoCourse';
 
 const HomeScreen = () => {
   return (
     <View style={styles.container}>
       <Header />
+      <NoCourse />
     </View>
   );
 };
@@ -19,6 +21,6 @@ const styles = StyleSheet.create({
     padding: 25,
     paddingTop: Platform.OS === 'ios' && 45,
     backgroundColor: Colors.WHITE,
-    flex:1,
+    flex: 1,
   },
 });
