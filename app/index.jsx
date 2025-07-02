@@ -5,17 +5,27 @@ import {onAuthStateChanged} from 'firebase/auth';
 import {auth, db} from '@/config/firebaseConfig';
 import {doc, getDoc} from 'firebase/firestore';
 import {UserDetailsContext} from '@/context/UserDetailsContext';
-import React, {useContext} from 'react';
+import React, {useContext, useEffect} from 'react';
 
 export default function Index() {
   const router = useRouter();
-  const {userDetails, setUserDetails} = useContext(UserDetailsContext);
-  onAuthStateChanged(auth, async user => {
-    if (user) {
-      console.log(user);
-      const result = await getDoc(doc(db, 'results', user?.email));
-    }
-  });
+  const {userDetails,setUserDetails} = useContext(UserDetailsContext);
+
+  useEffect(() => {
+    const unsubscribe = onAuthStateChanged(auth, async user => {
+      if (user) {
+        console.log('User signed in:', user.email);
+        const userDoc = await getDoc(doc(db, 'results', user.email));
+        if (userDoc.exists()) {
+          setUserDetails(userDoc.data());
+        }
+      } else {
+        router.replace('/auth/signIn');
+      }
+    });
+
+    return unsubscribe;
+  }, [router, setUserDetails]);
   return (
     <View style={styles.container}>
       <Image
